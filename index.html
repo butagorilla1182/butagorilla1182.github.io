@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GEO Satellite Control</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Satellite Control</title>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -14,8 +21,13 @@
       margin: 0;
       background: #07111f;
       color: #eef6ff;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
     }
+
 
     header {
       padding: 26px 16px 18px;
@@ -24,10 +36,12 @@
       background: #091626;
     }
 
+
     h1 {
       margin: 0;
       font-size: 30px;
     }
+
 
     .subtitle {
       margin-top: 8px;
@@ -35,428 +49,1032 @@
       font-size: 14px;
     }
 
+
     .container {
-      width: min(1200px, calc(100% - 24px));
+      width: min(
+        1200px,
+        calc(100% - 24px)
+      );
+
       margin: 24px auto;
     }
 
+
+    /* ========================================
+       SYSTEM CARD
+       ======================================== */
+
     .sat-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+
+      grid-template-columns:
+        repeat(4, 1fr);
+
       gap: 12px;
     }
+
 
     .sat-card {
       border: 1px solid #284561;
       border-radius: 14px;
+
       padding: 16px;
+
       background: #0d1d30;
+
       cursor: pointer;
+
       transition: 0.2s;
     }
+
 
     .sat-card:hover {
       transform: translateY(-2px);
       border-color: #499cff;
     }
 
+
     .sat-card.active {
       border: 2px solid #2384ff;
       background: #102742;
     }
+
 
     .sat-name {
       font-size: 20px;
       font-weight: 700;
     }
 
+
     .sat-update {
       color: #8fa9c3;
       font-size: 13px;
+
       margin-top: 8px;
+
       word-break: break-word;
     }
 
+
+    /* ========================================
+       CONTROL
+       ======================================== */
+
     .control {
       margin: 18px 0;
+
       padding: 18px;
+
       border: 1px solid #284561;
       border-radius: 14px;
+
       background: #0d1d30;
+
       text-align: center;
     }
+
 
     .selected-title {
       font-size: 22px;
       font-weight: 700;
+
       margin-bottom: 12px;
     }
+
 
     #updateBtn {
       border: 0;
       border-radius: 12px;
+
       padding: 15px 30px;
-      width: min(430px, 100%);
+
+      width: min(
+        430px,
+        100%
+      );
+
       background: #1677ff;
+
       color: white;
+
       font-size: 17px;
       font-weight: bold;
+
       cursor: pointer;
     }
+
 
     #updateBtn:disabled {
       opacity: 0.5;
       cursor: wait;
     }
 
+
     #status {
       min-height: 26px;
+
       margin-top: 12px;
+
       color: #73d7ff;
     }
+
+
+    /* ========================================
+       MAP
+       ======================================== */
 
     .map-wrap {
       border: 1px solid #284561;
       border-radius: 14px;
+
       overflow: hidden;
+
       background: white;
     }
 
+
     iframe {
       display: block;
+
       width: 100%;
+
       height: 70vh;
       min-height: 560px;
+
       border: 0;
     }
 
+
+    /* ========================================
+       LINKS
+       ======================================== */
+
     .links {
       margin-top: 14px;
+
       text-align: center;
     }
 
+
     .links a {
       color: #73b9ff;
+
       text-decoration: none;
+
       margin: 0 10px;
     }
 
-    @media (max-width: 700px) {
+
+    /* ========================================
+       MOBILE
+       ======================================== */
+
+    @media (
+      max-width: 700px
+    ) {
+
       .sat-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns:
+          repeat(2, 1fr);
       }
+
+
+      .sat-card {
+        padding: 14px 10px;
+      }
+
+
+      .sat-name {
+        font-size: 17px;
+      }
+
 
       h1 {
         font-size: 24px;
       }
 
+
       iframe {
-        height: 65vh;
-        min-height: 500px;
+        height: 72vh;
+        min-height: 560px;
       }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
 <header>
-  <h1>🛰 GEO SATELLITE CONTROL</h1>
+
+  <h1>
+    🛰 SATELLITE CONTROL
+  </h1>
+
   <div class="subtitle">
-    TJS / Russia / China GEO Satellite Monitor
+    GEO Satellite Monitor + Orbital Satellite Tracker
   </div>
+
 </header>
+
+
 
 <div class="container">
 
+
+  <!-- ========================================
+       SYSTEM CARDS
+       ======================================== -->
+
   <div class="sat-grid">
 
-    <div class="sat-card active"
-         id="card-tjs"
-         onclick="selectSystem('tjs')">
 
-      <div class="sat-name">🛰 TJS</div>
+    <!-- TJS -->
+
+    <div
+      class="sat-card active"
+      id="card-tjs"
+      onclick="selectSystem('tjs')"
+    >
+
+      <div class="sat-name">
+        🛰 TJS
+      </div>
 
       <div class="sat-update">
+
         最終更新：
-        <span id="time-tjs">読み込み中...</span>
+
+        <span id="time-tjs">
+          読み込み中...
+        </span>
+
       </div>
 
     </div>
 
 
-    <div class="sat-card"
-         id="card-russia"
-         onclick="selectSystem('russia')">
 
-      <div class="sat-name">🇷🇺 Russia</div>
+    <!-- RUSSIA -->
+
+    <div
+      class="sat-card"
+      id="card-russia"
+      onclick="selectSystem('russia')"
+    >
+
+      <div class="sat-name">
+        🇷🇺 Russia
+      </div>
 
       <div class="sat-update">
+
         最終更新：
-        <span id="time-russia">読み込み中...</span>
+
+        <span id="time-russia">
+          読み込み中...
+        </span>
+
       </div>
 
     </div>
 
 
-    <div class="sat-card"
-         id="card-china"
-         onclick="selectSystem('china')">
 
-      <div class="sat-name">🇨🇳 China</div>
+    <!-- CHINA -->
+
+    <div
+      class="sat-card"
+      id="card-china"
+      onclick="selectSystem('china')"
+    >
+
+      <div class="sat-name">
+        🇨🇳 China
+      </div>
 
       <div class="sat-update">
+
         最終更新：
-        <span id="time-china">読み込み中...</span>
+
+        <span id="time-china">
+          読み込み中...
+        </span>
+
       </div>
 
     </div>
+
+
+
+    <!-- ORBITAL -->
+
+    <div
+      class="sat-card"
+      id="card-orbital"
+      onclick="selectSystem('orbital')"
+    >
+
+      <div class="sat-name">
+        🌍 ORBITAL
+      </div>
+
+      <div class="sat-update">
+        NORAD / 衛星名からリアルタイム検索
+      </div>
+
+    </div>
+
 
   </div>
 
+
+
+  <!-- ========================================
+       CONTROL
+       ======================================== -->
 
   <div class="control">
 
-    <div class="selected-title" id="selectedTitle">
+
+    <div
+      class="selected-title"
+      id="selectedTitle"
+    >
       TJS GEO
     </div>
 
-    <button id="updateBtn" onclick="updateSelected()">
+
+    <button
+      id="updateBtn"
+      onclick="updateSelected()"
+    >
       🔄 選択中の衛星データを更新
     </button>
 
+
     <div id="status"></div>
+
 
   </div>
 
+
+
+  <!-- ========================================
+       MAP
+       ======================================== -->
 
   <div class="map-wrap">
 
     <iframe
       id="mapFrame"
-      src="/tjs_geo_control/tjs_map.html">
+      src="/tjs_geo_control/tjs_map.html"
+    >
     </iframe>
 
   </div>
 
 
+
+  <!-- ========================================
+       LINKS
+       ======================================== -->
+
   <div class="links">
 
-    <a id="controlLink"
-       href="/tjs_geo_control/"
-       target="_blank">
+
+    <a
+      id="controlLink"
+      href="/tjs_geo_control/"
+      target="_blank"
+    >
       個別コントロール画面を開く
     </a>
 
-    <a id="csvLink"
-       href="/tjs_geo_control/tjs_geo.csv"
-       target="_blank">
+
+    <a
+      id="csvLink"
+      href="/tjs_geo_control/tjs_geo.csv"
+      target="_blank"
+    >
       CSV
     </a>
 
+
   </div>
+
 
 </div>
 
 
+
 <script>
+
 
 const WORKER =
   "https://satellite-map-updater.shingo48691014.workers.dev";
 
+
+
+/* ========================================
+   SYSTEM DEFINITIONS
+   ======================================== */
+
 const systems = {
 
+
   tjs: {
-    title: "TJS GEO",
-    map: "/tjs_geo_control/tjs_map.html",
-    control: "/tjs_geo_control/",
-    csv: "/tjs_geo_control/tjs_geo.csv",
-    lastUpdated: "/tjs_geo_control/last_updated.txt",
-    worker: "/tjs"
+
+    title:
+      "TJS GEO",
+
+    map:
+      "/tjs_geo_control/tjs_map.html",
+
+    control:
+      "/tjs_geo_control/",
+
+    csv:
+      "/tjs_geo_control/tjs_geo.csv",
+
+    lastUpdated:
+      "/tjs_geo_control/last_updated.txt",
+
+    worker:
+      "/tjs",
+
+    live:
+      false
   },
+
+
 
   russia: {
-    title: "Russia GEO",
-    map: "/russia_geo_map/russia_map.html",
-    control: "/russia_geo_map/",
-    csv: "/russia_geo_map/russia_geo.csv",
-    lastUpdated: "/russia_geo_map/last_updated.txt",
-    worker: "/russia"
+
+    title:
+      "Russia GEO",
+
+    map:
+      "/russia_geo_map/russia_map.html",
+
+    control:
+      "/russia_geo_map/",
+
+    csv:
+      "/russia_geo_map/russia_geo.csv",
+
+    lastUpdated:
+      "/russia_geo_map/last_updated.txt",
+
+    worker:
+      "/russia",
+
+    live:
+      false
   },
 
+
+
   china: {
-    title: "China GEO",
-    map: "/china_geo_map/china_map.html",
-    control: "/china_geo_map/",
-    csv: "/china_geo_map/china_geo.csv",
-    lastUpdated: "/china_geo_map/last_updated.txt",
-    worker: "/china"
+
+    title:
+      "China GEO",
+
+    map:
+      "/china_geo_map/china_map.html",
+
+    control:
+      "/china_geo_map/",
+
+    csv:
+      "/china_geo_map/china_geo.csv",
+
+    lastUpdated:
+      "/china_geo_map/last_updated.txt",
+
+    worker:
+      "/china",
+
+    live:
+      false
+  },
+
+
+
+  orbital: {
+
+    title:
+      "ORBITAL SATELLITE TRACKER",
+
+    map:
+      "/orbital_satellite_map/",
+
+    control:
+      "/orbital_satellite_map/",
+
+    csv:
+      null,
+
+    lastUpdated:
+      null,
+
+    worker:
+      null,
+
+    live:
+      true
   }
 
 };
 
-let selected = "tjs";
 
 
-function selectSystem(name) {
+let selected =
+  "tjs";
 
-  selected = name;
+
+
+/* ========================================
+   SYSTEM SELECT
+   ======================================== */
+
+function selectSystem(
+  name
+) {
+
+
+  selected =
+    name;
+
 
   document
-    .querySelectorAll(".sat-card")
-    .forEach(card => card.classList.remove("active"));
+    .querySelectorAll(
+      ".sat-card"
+    )
+    .forEach(
+      card =>
+        card.classList.remove(
+          "active"
+        )
+    );
+
 
   document
-    .getElementById("card-" + name)
-    .classList.add("active");
+    .getElementById(
+      "card-" + name
+    )
+    .classList.add(
+      "active"
+    );
 
-  const system = systems[name];
 
-  document.getElementById("selectedTitle").textContent =
-    system.title;
+  const system =
+    systems[name];
 
-  document.getElementById("mapFrame").src =
-    system.map + "?t=" + Date.now();
 
-  document.getElementById("controlLink").href =
+  document
+    .getElementById(
+      "selectedTitle"
+    )
+    .textContent =
+      system.title;
+
+
+  const frame =
+    document.getElementById(
+      "mapFrame"
+    );
+
+
+  frame.src =
+    system.map
+    +
+    "?t="
+    +
+    Date.now();
+
+
+
+  /* ======================================
+     ORBITALはリアルタイム検索なので
+     更新ボタン不要
+     ====================================== */
+
+  const updateButton =
+    document.getElementById(
+      "updateBtn"
+    );
+
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  const csvLink =
+    document.getElementById(
+      "csvLink"
+    );
+
+
+  const controlLink =
+    document.getElementById(
+      "controlLink"
+    );
+
+
+
+  if (
+    system.live
+  ) {
+
+
+    updateButton.style.display =
+      "none";
+
+
+    status.textContent =
+      "🌍 NORAD ID または衛星名を検索してください";
+
+
+    csvLink.style.display =
+      "none";
+
+
+    controlLink.textContent =
+      "周回衛星画面を開く";
+
+
+    /*
+     * Orbitalは検索・情報・地図・
+     * スライダーがあるので少し縦長
+     */
+    frame.style.height =
+      "950px";
+
+
+    frame.style.minHeight =
+      "850px";
+
+  }
+
+
+  else {
+
+
+    updateButton.style.display =
+      "inline-block";
+
+
+    updateButton.disabled =
+      false;
+
+
+    status.textContent =
+      "";
+
+
+    csvLink.style.display =
+      "inline";
+
+
+    csvLink.href =
+      system.csv;
+
+
+    controlLink.textContent =
+      "個別コントロール画面を開く";
+
+
+    frame.style.height =
+      "";
+
+
+    frame.style.minHeight =
+      "";
+
+  }
+
+
+
+  controlLink.href =
     system.control;
 
-  document.getElementById("csvLink").href =
-    system.csv;
-
-  document.getElementById("status").textContent = "";
 }
 
 
-async function getLastUpdated(name) {
 
-  const system = systems[name];
+/* ========================================
+   LAST UPDATED
+   ======================================== */
+
+async function getLastUpdated(
+  name
+) {
+
+
+  const system =
+    systems[name];
+
+
+  if (
+    !system.lastUpdated
+  ) {
+    return "";
+  }
+
 
   try {
 
-    const response = await fetch(
-      system.lastUpdated + "?t=" + Date.now(),
-      { cache: "no-store" }
-    );
 
-    if (!response.ok) {
+    const response =
+      await fetch(
+
+        system.lastUpdated
+        +
+        "?t="
+        +
+        Date.now(),
+
+        {
+          cache:
+            "no-store"
+        }
+      );
+
+
+    if (
+      !response.ok
+    ) {
       throw new Error();
     }
 
-    const text = (await response.text()).trim();
 
-    document.getElementById("time-" + name).textContent =
-      text;
+    const text =
+      (
+        await response.text()
+      ).trim();
+
+
+    document
+      .getElementById(
+        "time-" + name
+      )
+      .textContent =
+        text;
+
 
     return text;
 
-  } catch {
+  }
 
-    document.getElementById("time-" + name).textContent =
-      "取得できません";
+
+  catch {
+
+
+    document
+      .getElementById(
+        "time-" + name
+      )
+      .textContent =
+        "取得できません";
+
 
     return "";
+
   }
+
 }
 
 
+
+/* ========================================
+   REFRESH TIMES
+   ======================================== */
+
 async function refreshAllTimes() {
 
+
   await Promise.all([
-    getLastUpdated("tjs"),
-    getLastUpdated("russia"),
-    getLastUpdated("china")
+
+    getLastUpdated(
+      "tjs"
+    ),
+
+    getLastUpdated(
+      "russia"
+    ),
+
+    getLastUpdated(
+      "china"
+    )
+
   ]);
 
 }
 
 
+
+/* ========================================
+   UPDATE SELECTED GEO DATA
+   ======================================== */
+
 async function updateSelected() {
 
-  const button =
-    document.getElementById("updateBtn");
-
-  const status =
-    document.getElementById("status");
 
   const system =
     systems[selected];
 
-  button.disabled = true;
+
+  /*
+   * ORBITALは更新不要
+   */
+  if (
+    system.live ||
+    !system.worker
+  ) {
+    return;
+  }
+
+
+  const button =
+    document.getElementById(
+      "updateBtn"
+    );
+
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  button.disabled =
+    true;
+
 
   const before =
-    await getLastUpdated(selected);
+    await getLastUpdated(
+      selected
+    );
+
 
   status.textContent =
     "🔄 更新要求を送信しています...";
 
+
   try {
 
-    const response = await fetch(
-      WORKER + system.worker,
-      { method: "POST" }
-    );
 
-    const result = await response.json();
+    const response =
+      await fetch(
 
-    if (!response.ok || !result.ok) {
+        WORKER
+        +
+        system.worker,
+
+        {
+          method:
+            "POST"
+        }
+      );
+
+
+    const result =
+      await response.json();
+
+
+    if (
+      !response.ok ||
+      !result.ok
+    ) {
       throw new Error();
     }
+
 
     status.textContent =
       "⏳ GitHub Actionsで更新中...";
 
-    let count = 0;
 
-    const timer = setInterval(async () => {
+    let count =
+      0;
 
-      count++;
 
-      const current =
-        await getLastUpdated(selected);
+    const timer =
+      setInterval(
 
-      if (current && before && current !== before) {
+        async () => {
 
-        clearInterval(timer);
 
-        status.textContent =
-          "✅ 更新完了！";
+          count++;
 
-        document.getElementById("mapFrame").src =
-          system.map + "?t=" + Date.now();
 
-        button.disabled = false;
+          const current =
+            await getLastUpdated(
+              selected
+            );
 
-        refreshAllTimes();
 
-        return;
-      }
+          if (
+            current &&
+            before &&
+            current !== before
+          ) {
 
-      if (count >= 30) {
 
-        clearInterval(timer);
+            clearInterval(
+              timer
+            );
 
-        status.textContent =
-          "⚠ 更新処理は継続中です。少し後で確認してください。";
 
-        button.disabled = false;
-      }
+            status.textContent =
+              "✅ 更新完了！";
 
-    }, 5000);
 
-  } catch {
+            document
+              .getElementById(
+                "mapFrame"
+              )
+              .src =
+
+                system.map
+                +
+                "?t="
+                +
+                Date.now();
+
+
+            button.disabled =
+              false;
+
+
+            refreshAllTimes();
+
+
+            return;
+
+          }
+
+
+
+          if (
+            count >= 30
+          ) {
+
+
+            clearInterval(
+              timer
+            );
+
+
+            status.textContent =
+              "⚠ 更新処理は継続中です。少し後で確認してください。";
+
+
+            button.disabled =
+              false;
+
+          }
+
+        },
+
+        5000
+      );
+
+  }
+
+
+  catch {
+
 
     status.textContent =
       "❌ 更新要求に失敗しました";
 
-    button.disabled = false;
+
+    button.disabled =
+      false;
+
   }
+
 }
 
 
+
+/* ========================================
+   INITIAL LOAD
+   ======================================== */
+
 refreshAllTimes();
+
 
 </script>
 
+
 </body>
+
 </html>
